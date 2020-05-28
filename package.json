@@ -1,0 +1,22 @@
+{
+  "name": "hackaprev-ionic-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasOliveira91/hackaprev-ionic-web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucasOliveira91/hackaprev-ionic-web/issues"
+  },
+  "homepage": "https://github.com/lucasOliveira91/hackaprev-ionic-web#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
