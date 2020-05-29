@@ -1,3 +1,21 @@
+function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
+
+function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
@@ -523,6 +541,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var _security_auth_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(
     /*! ./security/auth.service */
     "./src/app/security/auth.service.ts");
+    /* harmony import */
+
+
+    var _config_app_error_handler__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(
+    /*! ./config/app.error.handler */
+    "./src/app/config/app.error.handler.ts");
+    /* harmony import */
+
+
+    var _shared_service_notification_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(
+    /*! ./shared/service/notification.service */
+    "./src/app/shared/service/notification.service.ts");
 
     function tokenGetter() {
       return localStorage.getItem('access_token');
@@ -540,12 +570,146 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           tokenGetter: tokenGetter
         }
       })],
-      providers: [_security_auth_service__WEBPACK_IMPORTED_MODULE_13__["AuthService"], _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_6__["StatusBar"], _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_5__["SplashScreen"], _shared_service_storange_service__WEBPACK_IMPORTED_MODULE_9__["StorageService"], _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_10__["JwtHelperService"], _security_auth_guard__WEBPACK_IMPORTED_MODULE_12__["AuthGuard"], {
+      providers: [_security_auth_service__WEBPACK_IMPORTED_MODULE_13__["AuthService"], _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_6__["StatusBar"], _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_5__["SplashScreen"], _shared_service_storange_service__WEBPACK_IMPORTED_MODULE_9__["StorageService"], _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_10__["JwtHelperService"], _security_auth_guard__WEBPACK_IMPORTED_MODULE_12__["AuthGuard"], _shared_service_notification_service__WEBPACK_IMPORTED_MODULE_15__["NotificationService"], {
         provide: _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouteReuseStrategy"],
         useClass: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicRouteStrategy"]
+      }, {
+        provide: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ErrorHandler"],
+        useClass: _config_app_error_handler__WEBPACK_IMPORTED_MODULE_14__["ApplicationErrorHandler"]
       }],
       bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"]]
     })], AppModule);
+    /***/
+  },
+
+  /***/
+  "./src/app/config/app.error.handler.ts":
+  /*!*********************************************!*\
+    !*** ./src/app/config/app.error.handler.ts ***!
+    \*********************************************/
+
+  /*! exports provided: ApplicationErrorHandler */
+
+  /***/
+  function srcAppConfigAppErrorHandlerTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "ApplicationErrorHandler", function () {
+      return ApplicationErrorHandler;
+    });
+    /* harmony import */
+
+
+    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! tslib */
+    "./node_modules/tslib/tslib.es6.js");
+    /* harmony import */
+
+
+    var _security_auth_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! ./../security/auth.service */
+    "./src/app/security/auth.service.ts");
+    /* harmony import */
+
+
+    var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! @angular/common/http */
+    "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/http.js");
+    /* harmony import */
+
+
+    var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+    /*! @angular/core */
+    "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+    /* harmony import */
+
+
+    var _shared_service_notification_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+    /*! ../shared/service/notification.service */
+    "./src/app/shared/service/notification.service.ts");
+
+    var ApplicationErrorHandler = /*#__PURE__*/function (_angular_core__WEBPAC) {
+      _inherits(ApplicationErrorHandler, _angular_core__WEBPAC);
+
+      var _super = _createSuper(ApplicationErrorHandler);
+
+      function ApplicationErrorHandler(injector, zone, notificationService) {
+        var _this2;
+
+        _classCallCheck(this, ApplicationErrorHandler);
+
+        _this2 = _super.call(this);
+        _this2.injector = injector;
+        _this2.zone = zone;
+        _this2.notificationService = notificationService;
+        return _this2;
+      }
+
+      _createClass(ApplicationErrorHandler, [{
+        key: "handleError",
+        value: function handleError(errorResponse) {
+          var _this3 = this;
+
+          if (errorResponse instanceof _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpErrorResponse"]) {
+            var objEror;
+
+            try {
+              objEror = JSON.parse(errorResponse.error);
+            } catch (ex) {
+              objEror = errorResponse;
+            }
+
+            this.zone.run(function () {
+              switch (errorResponse.status) {
+                case 401:
+                  _this3.notificationService.notify('Usuário ou senha inválido!');
+
+                  _this3.injector.get(_security_auth_service__WEBPACK_IMPORTED_MODULE_1__["AuthService"]).handleLogin();
+
+                  break;
+
+                case 403:
+                  _this3.notificationService.notify('É necessário efetuar o login.');
+
+                  _this3.injector.get(_security_auth_service__WEBPACK_IMPORTED_MODULE_1__["AuthService"]).handleLogin();
+
+                  break;
+
+                case 404:
+                  _this3.notificationService.notify(objEror.message || 'Not Found.');
+
+                  break;
+
+                default:
+                  _this3.notificationService.notify(objEror.message || 'Erro ao executar operação');
+
+                  break;
+              }
+            });
+          }
+
+          _get(_getPrototypeOf(ApplicationErrorHandler.prototype), "handleError", this).call(this, errorResponse);
+        }
+      }]);
+
+      return ApplicationErrorHandler;
+    }(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ErrorHandler"]);
+
+    ApplicationErrorHandler.ctorParameters = function () {
+      return [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Injector"]
+      }, {
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["NgZone"]
+      }, {
+        type: _shared_service_notification_service__WEBPACK_IMPORTED_MODULE_4__["NotificationService"]
+      }];
+    };
+
+    ApplicationErrorHandler = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Injectable"])()], ApplicationErrorHandler);
     /***/
   },
 
@@ -723,11 +887,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "getToken",
         value: function getToken(url) {
-          var _this2 = this;
+          var _this4 = this;
 
           if (url.indexOf('refresh_token') == -1) {
             this.refreshToken().subscribe(function (response) {
-              _this2.successfulLogin(response.headers.get('Authorization'));
+              _this4.successfulLogin(response.headers.get('Authorization'));
             });
           }
 
@@ -781,6 +945,96 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     };
 
     AuthService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Injectable"])()], AuthService);
+    /***/
+  },
+
+  /***/
+  "./src/app/shared/service/notification.service.ts":
+  /*!********************************************************!*\
+    !*** ./src/app/shared/service/notification.service.ts ***!
+    \********************************************************/
+
+  /*! exports provided: NotificationService */
+
+  /***/
+  function srcAppSharedServiceNotificationServiceTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "NotificationService", function () {
+      return NotificationService;
+    });
+    /* harmony import */
+
+
+    var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+    /*! tslib */
+    "./node_modules/tslib/tslib.es6.js");
+    /* harmony import */
+
+
+    var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+    /*! @angular/core */
+    "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+    /* harmony import */
+
+
+    var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+    /*! @ionic/angular */
+    "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
+
+    var NotificationService = /*#__PURE__*/function () {
+      function NotificationService(alertController) {
+        _classCallCheck(this, NotificationService);
+
+        this.alertController = alertController;
+      }
+
+      _createClass(NotificationService, [{
+        key: "notify",
+        value: function notify(message, subHeader) {
+          return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+            var alert;
+            return regeneratorRuntime.wrap(function _callee$(_context) {
+              while (1) {
+                switch (_context.prev = _context.next) {
+                  case 0:
+                    _context.next = 2;
+                    return this.alertController.create({
+                      header: 'Mensagem do Sistema',
+                      subHeader: subHeader,
+                      message: message,
+                      buttons: ['OK']
+                    });
+
+                  case 2:
+                    alert = _context.sent;
+                    _context.next = 5;
+                    return alert.present();
+
+                  case 5:
+                  case "end":
+                    return _context.stop();
+                }
+              }
+            }, _callee, this);
+          }));
+        }
+      }]);
+
+      return NotificationService;
+    }();
+
+    NotificationService.ctorParameters = function () {
+      return [{
+        type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"]
+      }];
+    };
+
+    NotificationService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])()], NotificationService);
     /***/
   },
 

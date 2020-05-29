@@ -614,6 +614,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/http.js");
 /* harmony import */ var _security_auth_guard__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./security/auth.guard */ "./src/app/security/auth.guard.ts");
 /* harmony import */ var _security_auth_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./security/auth.service */ "./src/app/security/auth.service.ts");
+/* harmony import */ var _config_app_error_handler__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./config/app.error.handler */ "./src/app/config/app.error.handler.ts");
+/* harmony import */ var _shared_service_notification_service__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./shared/service/notification.service */ "./src/app/shared/service/notification.service.ts");
+
+
 
 
 
@@ -651,11 +655,84 @@ AppModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
             _shared_service_storange_service__WEBPACK_IMPORTED_MODULE_9__["StorageService"],
             _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_10__["JwtHelperService"],
             _security_auth_guard__WEBPACK_IMPORTED_MODULE_12__["AuthGuard"],
-            { provide: _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouteReuseStrategy"], useClass: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicRouteStrategy"] }
+            _shared_service_notification_service__WEBPACK_IMPORTED_MODULE_15__["NotificationService"],
+            { provide: _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouteReuseStrategy"], useClass: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicRouteStrategy"] },
+            { provide: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ErrorHandler"], useClass: _config_app_error_handler__WEBPACK_IMPORTED_MODULE_14__["ApplicationErrorHandler"] },
         ],
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"]]
     })
 ], AppModule);
+
+
+
+/***/ }),
+
+/***/ "./src/app/config/app.error.handler.ts":
+/*!*********************************************!*\
+  !*** ./src/app/config/app.error.handler.ts ***!
+  \*********************************************/
+/*! exports provided: ApplicationErrorHandler */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ApplicationErrorHandler", function() { return ApplicationErrorHandler; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _security_auth_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../security/auth.service */ "./src/app/security/auth.service.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/http.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+/* harmony import */ var _shared_service_notification_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/service/notification.service */ "./src/app/shared/service/notification.service.ts");
+
+
+
+
+
+let ApplicationErrorHandler = class ApplicationErrorHandler extends _angular_core__WEBPACK_IMPORTED_MODULE_3__["ErrorHandler"] {
+    constructor(injector, zone, notificationService) {
+        super();
+        this.injector = injector;
+        this.zone = zone;
+        this.notificationService = notificationService;
+    }
+    handleError(errorResponse) {
+        if (errorResponse instanceof _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpErrorResponse"]) {
+            let objEror;
+            try {
+                objEror = JSON.parse(errorResponse.error);
+            }
+            catch (ex) {
+                objEror = errorResponse;
+            }
+            this.zone.run(() => {
+                switch (errorResponse.status) {
+                    case 401:
+                        this.notificationService.notify('Usuário ou senha inválido!');
+                        this.injector.get(_security_auth_service__WEBPACK_IMPORTED_MODULE_1__["AuthService"]).handleLogin();
+                        break;
+                    case 403:
+                        this.notificationService.notify('É necessário efetuar o login.');
+                        this.injector.get(_security_auth_service__WEBPACK_IMPORTED_MODULE_1__["AuthService"]).handleLogin();
+                        break;
+                    case 404:
+                        this.notificationService.notify(objEror.message || 'Not Found.');
+                        break;
+                    default:
+                        this.notificationService.notify(objEror.message || 'Erro ao executar operação');
+                        break;
+                }
+            });
+        }
+        super.handleError(errorResponse);
+    }
+};
+ApplicationErrorHandler.ctorParameters = () => [
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["Injector"] },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["NgZone"] },
+    { type: _shared_service_notification_service__WEBPACK_IMPORTED_MODULE_4__["NotificationService"] }
+];
+ApplicationErrorHandler = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Injectable"])()
+], ApplicationErrorHandler);
 
 
 
@@ -782,6 +859,49 @@ AuthService.ctorParameters = () => [
 AuthService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Injectable"])()
 ], AuthService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/shared/service/notification.service.ts":
+/*!********************************************************!*\
+  !*** ./src/app/shared/service/notification.service.ts ***!
+  \********************************************************/
+/*! exports provided: NotificationService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NotificationService", function() { return NotificationService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm2015/ionic-angular.js");
+
+
+
+let NotificationService = class NotificationService {
+    constructor(alertController) {
+        this.alertController = alertController;
+    }
+    notify(message, subHeader) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            const alert = yield this.alertController.create({
+                header: 'Mensagem do Sistema',
+                subHeader: subHeader,
+                message: message,
+                buttons: ['OK']
+            });
+            yield alert.present();
+        });
+    }
+};
+NotificationService.ctorParameters = () => [
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"] }
+];
+NotificationService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])()
+], NotificationService);
 
 
 
